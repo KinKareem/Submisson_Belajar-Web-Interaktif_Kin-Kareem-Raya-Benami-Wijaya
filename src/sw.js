@@ -1,7 +1,6 @@
-/* eslint-disable no-restricted-globals */
-const CACHE_NAME = "story-app-v2";
-const STATIC_CACHE = "story-app-static-v2";
-const API_CACHE = "story-app-api-v2";
+const VERSION = "v3";
+const STATIC_CACHE = `story-app-static-${VERSION}`;
+const API_CACHE = `story-app-api-${VERSION}`;
 
 const staticAssets = [
     "/",
@@ -40,15 +39,27 @@ self.addEventListener("install", (event) => {
     self.skipWaiting();
 });
 
-// Activate & clear old cache
+
 self.addEventListener("activate", (event) => {
     event.waitUntil(
-        caches.keys().then((names) =>
-            Promise.all(names.filter((n) => !n.includes("v2")).map((n) => caches.delete(n)))
-        )
+        (async () => {
+            const cacheNames = await caches.keys();
+            await Promise.all(
+                cacheNames
+                    .filter((name) => !name.includes("v2"))
+                    .map((name) => caches.delete(name))
+            );
+            // Pastikan klaim dilakukan setelah cache bersih
+            await self.clients.claim();
+
+            const clientsList = await self.clients.matchAll({ type: "window" });
+            for (const client of clientsList) {
+                client.postMessage({ type: "SW_UPDATED" });
+            }
+        })()
     );
-    self.clients.claim();
 });
+
 
 // Fetch strategy: network-first for API, cache-first for static assets
 self.addEventListener("fetch", (event) => {
