@@ -2,7 +2,7 @@ import { initRouter } from "./router.js";
 import { apiModel } from "./models/apiModel.js";
 import { favoriteDB } from "./db/favorite-db.js";
 
-import '../styles.css';
+import '../assets/styles.css';
 
 document.addEventListener("DOMContentLoaded", () => {
     initRouter();

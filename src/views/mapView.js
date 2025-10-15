@@ -131,6 +131,7 @@ export default class MapView {
                 <div class="story-content">
                     <h3 class="story-title">${story.name}</h3>
                     <p class="story-desc">${story.description}</p>
+                    <p class="story-date">${new Date(story.createdAt).toLocaleDateString()}</p>
                 </div>
                 <button
                     class="btn-favorite ${favoriteIds.has(story.id) ? 'favorited' : ''}"

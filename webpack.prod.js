@@ -39,7 +39,9 @@ export default {
         }),
         new CopyWebpackPlugin({
             patterns: [
-                { from: "src/sw.js", to: "" }, // 👈 juga salin untuk build
+                { from: "src/sw.js", to: "" },
+                { from: "manifest.json", to: "" },
+                { from: "icons", to: "icons" },
             ],
         }),
     ],

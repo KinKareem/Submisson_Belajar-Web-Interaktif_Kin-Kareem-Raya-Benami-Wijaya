@@ -14,8 +14,7 @@ const staticAssets = [
     "/src/models/apiModel.js",
     "/src/models/dataModel.js",
     "/src/db/favorite-db.js",
-    "/scripts/sw.js",
-    "/src/pwa-init.js",
+    "/scripts/pwa-init.js",
     "/src/views/homeView.js",
     "/src/views/aboutView.js",
     "/src/views/contactView.js",
@@ -24,6 +23,8 @@ const staticAssets = [
     "/src/views/favoritesView.js",
     "/src/views/login-page.js",
     "/src/views/register-page.js",
+    "/icons/icon-192x192.png",
+    "/icons/icon-512x512.png",
     "https://unpkg.com/leaflet@1.9.4/dist/leaflet.css",
     "https://unpkg.com/leaflet@1.9.4/dist/leaflet.js",
 ];

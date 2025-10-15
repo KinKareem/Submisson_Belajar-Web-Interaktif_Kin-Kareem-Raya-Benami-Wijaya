@@ -99,25 +99,55 @@ async function renderPage() {
     }
 
     const Page = routes[path] || HomeView;
-    app.innerHTML = "";
 
-    const pageInstance = new Page();
-    const presenter = new PagePresenter(pageInstance);
-    const view = await presenter.getView();
+    // Use View Transition API if supported
+    if (document.startViewTransition) {
+        const transition = document.startViewTransition(async () => {
+            app.innerHTML = "";
 
-    if (view) {
-        view.classList.add("view-transition");
-        app.appendChild(view);
+            const pageInstance = new Page();
+            const presenter = new PagePresenter(pageInstance);
+            const view = await presenter.getView();
 
-        // Pastikan afterRender() terpanggil jika ada
-        if (pageInstance.afterRender) {
-            await pageInstance.afterRender();
-        }
+            if (view) {
+                view.classList.add("view-transition");
+                app.appendChild(view);
+
+                // Pastikan afterRender() terpanggil jika ada
+                if (pageInstance.afterRender) {
+                    await pageInstance.afterRender();
+                }
+            } else {
+                console.error("View tidak ditemukan untuk route:", path);
+            }
+        });
+
+        // Update navbar after transition
+        transition.finished.then(() => {
+            updateNavbarUI();
+        });
     } else {
-        console.error("View tidak ditemukan untuk route:", path);
-    }
+        // Fallback for browsers without View Transition API
+        app.innerHTML = "";
 
-    // Update tombol navbar sesuai status login
-    updateNavbarUI();
+        const pageInstance = new Page();
+        const presenter = new PagePresenter(pageInstance);
+        const view = await presenter.getView();
+
+        if (view) {
+            view.classList.add("view-transition");
+            app.appendChild(view);
+
+            // Pastikan afterRender() terpanggil jika ada
+            if (pageInstance.afterRender) {
+                await pageInstance.afterRender();
+            }
+        } else {
+            console.error("View tidak ditemukan untuk route:", path);
+        }
+
+        // Update tombol navbar sesuai status login
+        updateNavbarUI();
+    }
 }
 
