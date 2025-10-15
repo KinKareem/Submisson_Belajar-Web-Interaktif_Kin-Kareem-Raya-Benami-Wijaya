@@ -54,6 +54,11 @@ self.addEventListener("activate", (event) => {
 self.addEventListener("fetch", (event) => {
     const url = new URL(event.request.url);
 
+    // Bypass SW for proxied API requests in development
+    if (url.pathname.startsWith("/api")) {
+        return;
+    }
+
     // Network-first for API calls (stories)
     if (url.origin === "https://story-api.dicoding.dev") {
         event.respondWith(

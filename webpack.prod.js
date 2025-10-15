@@ -4,6 +4,7 @@ import MiniCssExtractPlugin from "mini-css-extract-plugin";
 import CssMinimizerPlugin from "css-minimizer-webpack-plugin";
 import TerserPlugin from "terser-webpack-plugin";
 import CopyWebpackPlugin from "copy-webpack-plugin";
+import webpack from "webpack";
 import { fileURLToPath } from "url";
 
 const __filename = fileURLToPath(import.meta.url);
@@ -43,6 +44,9 @@ export default {
                 { from: "manifest.json", to: "" },
                 { from: "icons", to: "icons" },
             ],
+        }),
+        new webpack.DefinePlugin({
+            'process.env.NODE_ENV': JSON.stringify('production'),
         }),
     ],
     optimization: {

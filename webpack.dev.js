@@ -1,6 +1,7 @@
 import path from "path";
 import HtmlWebpackPlugin from "html-webpack-plugin";
 import CopyWebpackPlugin from "copy-webpack-plugin";
+import webpack from "webpack";
 import { fileURLToPath } from "url";
 
 const __filename = fileURLToPath(import.meta.url);
@@ -23,7 +24,16 @@ export default {
         open: true,
         hot: true,
         watchFiles: ["src/**/*", "index.html"],
+        proxy: [
+            {
+                context: ['/api'],
+                target: 'https://story-api.dicoding.dev',
+                changeOrigin: true,
+                pathRewrite: { '^/api': '/v1' },
+            },
+        ],
     },
+
     module: {
         rules: [
             {
@@ -48,8 +58,11 @@ export default {
         }),
         new CopyWebpackPlugin({
             patterns: [
-                { from: "src/sw.js", to: "" }, // 👈 salin sw.js ke root dist
+                { from: "src/sw.js", to: "" },
             ],
+        }),
+        new webpack.DefinePlugin({
+            'process.env.NODE_ENV': JSON.stringify('development'),
         }),
     ],
 };
