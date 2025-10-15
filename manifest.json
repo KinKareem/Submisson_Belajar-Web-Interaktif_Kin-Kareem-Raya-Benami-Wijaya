@@ -1,0 +1,9 @@
+{
+    "name": "Story App SPA",
+    "short_name": "StoryApp",
+    "start_url": "/index.html",
+    "display": "standalone",
+    "background_color": "#ffffff",
+    "theme_color": "#536b78",
+    "description": "Aplikasi cerita berbasis SPA dan PWA."
+}
