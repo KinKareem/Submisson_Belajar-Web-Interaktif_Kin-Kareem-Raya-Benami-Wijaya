@@ -18,11 +18,12 @@ export default {
     devtool: "inline-source-map",
     devServer: {
         static: {
-            directory: path.resolve(__dirname),
+            directory: path.resolve(__dirname, "dist"),
         },
         port: 8080,
         open: true,
-        hot: true,
+        hot: false, // Disable hot reload to prevent infinite refresh
+        liveReload: false, // Disable live reload
         watchFiles: ["src/**/*", "index.html"],
         proxy: [
             {
@@ -59,6 +60,7 @@ export default {
         new CopyWebpackPlugin({
             patterns: [
                 { from: "src/sw.js", to: "" },
+                { from: "scripts/pwa-init.js", to: "scripts/" },
             ],
         }),
         new webpack.DefinePlugin({

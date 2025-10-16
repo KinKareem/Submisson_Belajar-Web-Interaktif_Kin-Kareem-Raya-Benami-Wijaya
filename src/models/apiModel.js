@@ -126,27 +126,69 @@ export const apiModel = {
         }
     },
 
-    async sendSubscription(subscription) {
+    // ===============================
+    // 🔔 Web Push Notification
+    // ===============================
+    async subscribeWebPush(subscription) {
         const token = this.getToken();
         if (!token) return { error: true, message: "Silakan login terlebih dahulu." };
 
         try {
-            const response = await fetch(`${BASE_URL}/register/device`, {
+            // Format sesuai dokumentasi
+            const body = {
+                endpoint: subscription.endpoint,
+                keys: {
+                    p256dh: subscription.keys.p256dh,
+                    auth: subscription.keys.auth
+                }
+            };
+
+            const response = await fetch(`${BASE_URL}/notifications/subscribe`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
                     Authorization: `Bearer ${token}`
                 },
-                body: JSON.stringify(subscription),
+                body: JSON.stringify(body),
             });
 
             const result = await response.json();
             if (result.error) throw new Error(result.message);
 
-            console.log("✅ Subscription sent to server");
-            return { error: false, message: "Subscription registered!" };
+            console.log("✅ WebPush subscription berhasil:", result);
+            return { error: false, message: result.message, data: result.data };
         } catch (err) {
-            console.error("❌ Failed to send subscription:", err.message);
+            console.error("❌ Failed to subscribe WebPush:", err.message);
+            return { error: true, message: err.message };
+        }
+    },
+
+    async unsubscribeWebPush(subscription) {
+        const token = this.getToken();
+        if (!token) return { error: true, message: "Silakan login terlebih dahulu." };
+
+        try {
+            // Hanya kirim endpoint sesuai dokumentasi
+            const body = {
+                endpoint: subscription.endpoint
+            };
+
+            const response = await fetch(`${BASE_URL}/notifications/subscribe`, {
+                method: "DELETE",
+                headers: {
+                    "Content-Type": "application/json",
+                    Authorization: `Bearer ${token}`
+                },
+                body: JSON.stringify(body),
+            });
+
+            const result = await response.json();
+            if (result.error) throw new Error(result.message);
+
+            console.log("✅ WebPush unsubscription berhasil:", result);
+            return { error: false, message: result.message };
+        } catch (err) {
+            console.error("❌ Failed to unsubscribe WebPush:", err.message);
             return { error: true, message: err.message };
         }
     },

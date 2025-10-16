@@ -54,7 +54,7 @@ export const pushManager = {
             });
 
             // Send subscription to server
-            const result = await apiModel.sendSubscription(subscription.toJSON());
+            const result = await apiModel.subscribeWebPush(subscription.toJSON());
             if (result.error) {
                 console.error("❌ Failed to register subscription on server");
                 await subscription.unsubscribe();
@@ -75,6 +75,12 @@ export const pushManager = {
             const registration = await navigator.serviceWorker.ready;
             const subscription = await registration.pushManager.getSubscription();
             if (subscription) {
+                // Send unsubscription to server
+                const result = await apiModel.unsubscribeWebPush(subscription.toJSON());
+                if (result.error) {
+                    console.error("❌ Failed to unregister subscription on server");
+                    // Continue with local unsubscribe anyway
+                }
                 await subscription.unsubscribe();
                 console.log("✅ Push subscription dibatalkan");
                 localStorage.removeItem("pushSubscription");
