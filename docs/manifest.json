@@ -4,7 +4,7 @@
     "start_url": "/index.html",
     "display": "standalone",
     "background_color": "#ffffff",
-    "theme_color": "#536b78",
+    "theme_color": "#ffffff",
     "description": "Aplikasi cerita berbasis SPA dan PWA.",
     "icons": [
         {

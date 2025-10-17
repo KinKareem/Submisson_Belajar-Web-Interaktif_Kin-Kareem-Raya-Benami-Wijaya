@@ -118,7 +118,7 @@ export default class AddStoryView {
         }
       } else {
         alert("✅ Cerita berhasil ditambahkan!");
-        window.location.hash = "/";
+        window.location.hash = "#/map";
       }
     });
   }

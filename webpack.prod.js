@@ -43,6 +43,7 @@ export default {
                 { from: "src/sw.js", to: "" },
                 { from: "manifest.json", to: "" },
                 { from: "icons", to: "icons" },
+                { from: "scripts/pwa-init.js", to: "" },
             ],
         }),
         new webpack.DefinePlugin({
